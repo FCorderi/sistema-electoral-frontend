@@ -9,7 +9,7 @@ const api = axios.create({
 
 // Servicios para votantes
 export const votanteAPI = {
-    login: (cedula) => api.post('/votantes/login', { cedula }),
+    login: (credencial) => api.post('/votantes/login', { credencial }),
     votar: (cedula, idPapeleta, idCircuito) =>
         api.post('/votantes/votar', { cedula, idPapeleta, idCircuito }),
 };
