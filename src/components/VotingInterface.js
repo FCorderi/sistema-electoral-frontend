@@ -73,7 +73,7 @@ const VotingInterface = ({ votante, onLogout }) => {
     return (
         <div className="voting-container">
             <div className="voting-header">
-                <h2>🗳️ {eleccion?.Nombre}</h2>
+                <h2>🗳️ Elección Municipal</h2>
                 <div className="voter-info">
                     <p><strong>Votante:</strong> {votante.nombre}</p>
                     <p><strong>Cédula:</strong> {votante.cedula}</p>
@@ -94,8 +94,6 @@ const VotingInterface = ({ votante, onLogout }) => {
                         <div className={`papeleta-color ${papeleta.Color.toLowerCase()}`}></div>
 
                         <div className="papeleta-info">
-
-                            <p>{papeleta.Tipo}</p>
                             {papeleta.NombreCandidato && <p><strong>{papeleta.NombreCandidato}</strong></p>}
                         </div>
                     </div>
