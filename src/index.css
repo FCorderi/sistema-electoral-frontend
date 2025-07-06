@@ -189,6 +189,12 @@ body {
     background: #ffc107;
 }
 
+.numero-lista {
+    font-size: 3rem;
+    margin-right: 2rem;
+
+}
+
 .voting-actions {
     padding: 30px;
     text-align: center;

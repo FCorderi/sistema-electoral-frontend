@@ -97,7 +97,9 @@ const VotingInterface = ({ votante, onLogout, onBackToSelection }) => {
                         className={`papeleta ${selectedPapeleta?.Id_papeleta === papeleta.Id_papeleta ? 'selected' : ''}`}
                         onClick={() => setSelectedPapeleta(papeleta)}
                     >
+                        <h4 className='numero-lista' >{papeleta.NumeroLista}</h4>
                         <div className={`papeleta-color ${papeleta.Color.toLowerCase()}`}></div>
+
                         <div className="papeleta-info">
                             <h4>{papeleta.Color}</h4>
                             <p>{papeleta.Descripcion}</p>
