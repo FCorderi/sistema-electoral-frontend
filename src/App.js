@@ -3,6 +3,7 @@ import Login from './components/Login';
 import VotingInterface from './components/VotingInterface';
 import PresidenteMesa from './components/PresidenteMesa';
 import Results from './components/Results';
+import MemberSelection from './components/MemberSelection';
 import './index.css';
 
 function App() {
@@ -14,9 +15,19 @@ function App() {
 
     // Determinar vista según el rol
     if (votante.rol.tipo === 'miembro_mesa') {
-      setCurrentView('presidente');
+      setCurrentView('member-selection');
     } else {
       setCurrentView('voting');
+    }
+  };
+
+  const handleRoleSelection = (selectedRole) => {
+    setCurrentView(selectedRole);
+  };
+
+  const handleBackToSelection = () => {
+    if (currentUser && currentUser.rol.tipo === 'miembro_mesa') {
+      setCurrentView('member-selection');
     }
   };
 
@@ -41,10 +52,24 @@ function App() {
             </div>
           </div>
         );
+      case 'member-selection':
+        return <MemberSelection 
+          votante={currentUser} 
+          onSelectRole={handleRoleSelection}
+          onLogout={handleLogout} 
+        />;
       case 'voting':
-        return <VotingInterface votante={currentUser} onLogout={handleLogout} />;
+        return <VotingInterface 
+          votante={currentUser} 
+          onLogout={handleLogout}
+          onBackToSelection={handleBackToSelection}
+        />;
       case 'presidente':
-        return <PresidenteMesa votante={currentUser} onLogout={handleLogout} />;
+        return <PresidenteMesa 
+          votante={currentUser} 
+          onLogout={handleLogout}
+          onBackToSelection={handleBackToSelection}
+        />;
       case 'results':
         return <Results onBack={() => setCurrentView('login')} />;
       default:
