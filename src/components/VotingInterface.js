@@ -40,7 +40,7 @@ const VotingInterface = ({ votante, onLogout, onBackToSelection }) => {
 
         try {
             const response = await votanteAPI.votar(
-                votante.cedula,
+                votante.credencial,
                 selectedPapeleta.Id_papeleta,
                 votante.circuito
             );

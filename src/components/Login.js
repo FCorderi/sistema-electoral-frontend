@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { votanteAPI } from '../services/api';
 
 const Login = ({ onLogin }) => {
-    const [cedula, setCedula] = useState('');
+    const [credencial, setCredencial] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!cedula.trim()) {
-            setError('La cédula es requerida');
+        if (!credencial.trim()) {
+            setError('La credencial es requerida');
             return;
         }
 
@@ -17,7 +17,7 @@ const Login = ({ onLogin }) => {
         setError('');
 
         try {
-            const response = await votanteAPI.login(cedula);
+            const response = await votanteAPI.login(credencial);
             const { votante } = response.data;
             onLogin(votante);
         } catch (error) {
@@ -33,13 +33,13 @@ const Login = ({ onLogin }) => {
                 <h2>🗳️ Sistema Electoral</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label htmlFor="cedula">Cédula de Identidad</label>
+                        <label htmlFor="credencial">Credencial Cívica</label>
                         <input
                             type="text"
-                            id="cedula"
-                            value={cedula}
-                            onChange={(e) => setCedula(e.target.value)}
-                            placeholder="Ingrese su cédula"
+                            id="credencial"
+                            value={credencial}
+                            onChange={(e) => setCredencial(e.target.value)}
+                            placeholder="Ingrese su credencial"
                             disabled={loading}
                         />
                     </div>
