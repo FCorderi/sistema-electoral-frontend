@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { eleccionAPI, votanteAPI } from '../services/api';
 
-const VotingInterface = ({ votante, onLogout }) => {
+const VotingInterface = ({ votante, onLogout, onBackToSelection }) => {
     const [eleccion, setEleccion] = useState(null);
     const [papeletas, setPapeletas] = useState([]);
     const [selectedPapeleta, setSelectedPapeleta] = useState(null);
@@ -40,7 +40,7 @@ const VotingInterface = ({ votante, onLogout }) => {
 
         try {
             const response = await votanteAPI.votar(
-                votante.cedula,
+                votante.credencial,
                 selectedPapeleta.Id_papeleta,
                 votante.circuito
             );
@@ -79,7 +79,14 @@ const VotingInterface = ({ votante, onLogout }) => {
                     <p><strong>Cédula:</strong> {votante.cedula}</p>
                     <p><strong>Circuito:</strong> {votante.circuito}</p>
                 </div>
-                <button onClick={onLogout} className="btn btn-secondary">Salir</button>
+                <div className="header-actions">
+                    {votante.rol.tipo === 'miembro_mesa' && onBackToSelection && (
+                        <button onClick={onBackToSelection} className="btn btn-link">
+                            ← Volver a selección
+                        </button>
+                    )}
+                    <button onClick={onLogout} className="btn btn-secondary">Salir</button>
+                </div>
             </div>
 
             <div className="papeletas-container">

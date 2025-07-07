@@ -3,6 +3,7 @@ import { votanteAPI } from '../services/api';
 
 const Login = ({ onLogin }) => {
     const [credencial, setCredencial] = useState('');
+    const [cedula, setCedula] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -39,7 +40,7 @@ const Login = ({ onLogin }) => {
                             id="credencial"
                             value={credencial}
                             onChange={(e) => setCredencial(e.target.value)}
-                            placeholder="Ingrese su cédula"
+                            placeholder="Ingrese su credencial"
                             disabled={loading}
                         />
                     </div>
