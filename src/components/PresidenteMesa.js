@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { mesaAPI, eleccionAPI } from '../services/api';
 
-const PresidenteMesa = ({ votante, onLogout }) => {
+const PresidenteMesa = ({ votante, onLogout, onBackToSelection }) => {
     const [estadoMesa, setEstadoMesa] = useState(null);
     const [resultados, setResultados] = useState([]);
     const [mesasAbiertas, setMesasAbiertas] = useState([]);
@@ -59,14 +59,21 @@ const PresidenteMesa = ({ votante, onLogout }) => {
     return (
         <div className="presidente-container">
             <div className="presidente-header">
-                <h2>🏛️ Panel de Presidente de Mesa</h2>
+                <h2>🏛️ Panel de {votante.rol.rol} de Mesa</h2>
                 <div className="presidente-info">
-                    <p><strong>Presidente:</strong> {votante.nombre}</p>
+                    <p><strong>Nombre:</strong> {votante.nombre}</p>
                     <p><strong>Cédula:</strong> {votante.cedula}</p>
                     <p><strong>Circuito:</strong> {votante.rol.circuito}</p>
                     <p><strong>Rol:</strong> {votante.rol.rol}</p>
                 </div>
-                <button onClick={onLogout} className="btn btn-secondary">Salir</button>
+                <div className="header-actions">
+                    {onBackToSelection && (
+                        <button onClick={onBackToSelection} className="btn btn-link">
+                            ← Volver a selección
+                        </button>
+                    )}
+                    <button onClick={onLogout} className="btn btn-secondary">Salir</button>
+                </div>
             </div>
 
             {message && <div className="success">{message}</div>}
