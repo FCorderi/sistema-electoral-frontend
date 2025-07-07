@@ -9,10 +9,23 @@ const VotingInterface = ({ votante, onLogout, onBackToSelection }) => {
     const [voting, setVoting] = useState(false);
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
+    const [estadoMesa, setEstadoMesa] = useState(null);
 
     useEffect(() => {
         loadEleccionData();
+        if (votante.rol.tipo === 'miembro_mesa') {
+            verificarEstadoMesa();
+        }
     }, []);
+
+    const verificarEstadoMesa = async () => {
+        try {
+            const response = await votanteAPI.verificarEstadoMesa(votante.credencial);
+            setEstadoMesa(response.data);
+        } catch (error) {
+            console.error('Error verificando estado de mesa:', error);
+        }
+    };
 
     const loadEleccionData = async () => {
         try {
@@ -33,6 +46,20 @@ const VotingInterface = ({ votante, onLogout, onBackToSelection }) => {
         if (!selectedPapeleta) {
             setError('Debe seleccionar una papeleta');
             return;
+        }
+
+        // Verificar estado de la mesa antes de votar (solo para votantes regulares)
+        if (votante.rol.tipo === 'votante') {
+            try {
+                const response = await votanteAPI.verificarEstadoMesa(votante.credencial);
+                if (!response.data.mesaAbierta) {
+                    setError('No se puede votar: la mesa electoral está cerrada');
+                    return;
+                }
+            } catch (error) {
+                setError('Error al verificar el estado de la mesa');
+                return;
+            }
         }
 
         setVoting(true);
@@ -88,6 +115,14 @@ const VotingInterface = ({ votante, onLogout, onBackToSelection }) => {
                     <button onClick={onLogout} className="btn btn-secondary">Salir</button>
                 </div>
             </div>
+
+            {/* Mostrar advertencia si la mesa está cerrada para miembros de mesa */}
+            {votante.rol.tipo === 'miembro_mesa' && estadoMesa && !estadoMesa.mesaAbierta && (
+                <div className="warning-message">
+                    <p><strong>⚠️ Advertencia:</strong> {estadoMesa.mensaje}</p>
+                    <p>Como miembro de mesa, puede acceder a esta vista, pero la votación puede no estar disponible.</p>
+                </div>
+            )}
 
             <div className="papeletas-container">
                 <h3>Seleccione su opción:</h3>
