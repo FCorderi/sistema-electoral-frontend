@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { votanteAPI } from '../services/api';
+import { mesaAPI } from '../services/api';
 
 const MemberSelection = ({ votante, onSelectRole, onLogout }) => {
     const [estadoMesa, setEstadoMesa] = useState(null);
@@ -12,9 +12,20 @@ const MemberSelection = ({ votante, onSelectRole, onLogout }) => {
 
     const verificarEstadoMesa = async () => {
         try {
-            const response = await votanteAPI.verificarEstadoMesa(votante.credencial);
-            setEstadoMesa(response.data);
-            console.log('Estado de mesa verificado:', response.data);
+            // Usar la API de mesas existente con el circuito del miembro de mesa
+            const response = await mesaAPI.obtenerEstado(votante.rol.circuito);
+            const estadoMesaData = response.data.estado;
+            
+            // Adaptar el formato para mantener compatibilidad
+            const estadoMesaAdaptado = {
+                mesaAbierta: estadoMesaData.Esta_abierta,
+                mensaje: estadoMesaData.Esta_abierta 
+                    ? 'La mesa está abierta para votación' 
+                    : 'La mesa está cerrada'
+            };
+            
+            setEstadoMesa(estadoMesaAdaptado);
+            console.log('Estado de mesa verificado:', estadoMesaAdaptado);
         } catch (error) {
             console.error('Error al verificar estado de mesa:', error);
             setError('No se pudo verificar el estado de la mesa');

@@ -4,7 +4,7 @@ import VotingInterface from './components/VotingInterface';
 import PresidenteMesa from './components/PresidenteMesa';
 import Results from './components/Results';
 import MemberSelection from './components/MemberSelection';
-import { votanteAPI } from './services/api';
+import { votanteAPI, mesaAPI } from './services/api';
 import './index.css';
 
 function App() {
@@ -30,16 +30,22 @@ function App() {
 
   const verificarEstadoMesaYRedirigir = async (votante) => {
     try {
-      const response = await votanteAPI.verificarEstadoMesa(votante.credencial);
-      const estadoMesa = response.data;
+      // Usar la API de mesas existente con el circuito del votante
+      const response = await mesaAPI.obtenerEstado(votante.circuito);
+      const estadoMesa = response.data.estado;
       
-      if (estadoMesa.mesaAbierta) {
+      if (estadoMesa.Esta_abierta) {
         console.log('Mesa abierta - dirigiendo a voting');
         setCurrentView('voting');
       } else {
         console.log('Mesa cerrada - dirigiendo a mesa-cerrada');
         // Agregar la información del estado de mesa al usuario
-        setCurrentUser({...votante, estadoMesa});
+        const estadoMesaInfo = {
+          mesaAbierta: false,
+          mensaje: 'La mesa electoral está cerrada. No se puede votar en este momento.',
+          estadoMesa
+        };
+        setCurrentUser({...votante, estadoMesa: estadoMesaInfo});
         setCurrentView('mesa-cerrada');
       }
     } catch (error) {

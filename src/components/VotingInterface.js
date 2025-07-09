@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { eleccionAPI, votanteAPI } from '../services/api';
+import { eleccionAPI, votanteAPI, mesaAPI } from '../services/api';
 
 const VotingInterface = ({ votante, onLogout, onBackToSelection }) => {
     const [eleccion, setEleccion] = useState(null);
@@ -20,8 +20,19 @@ const VotingInterface = ({ votante, onLogout, onBackToSelection }) => {
 
     const verificarEstadoMesa = async () => {
         try {
-            const response = await votanteAPI.verificarEstadoMesa(votante.credencial);
-            setEstadoMesa(response.data);
+            // Usar la API de mesas existente con el circuito del miembro de mesa
+            const response = await mesaAPI.obtenerEstado(votante.rol.circuito);
+            const estadoMesaData = response.data.estado;
+            
+            // Adaptar el formato para mantener compatibilidad
+            const estadoMesaAdaptado = {
+                mesaAbierta: estadoMesaData.Esta_abierta,
+                mensaje: estadoMesaData.Esta_abierta 
+                    ? 'La mesa está abierta para votación' 
+                    : 'La mesa está cerrada'
+            };
+            
+            setEstadoMesa(estadoMesaAdaptado);
         } catch (error) {
             console.error('Error verificando estado de mesa:', error);
         }
@@ -51,8 +62,9 @@ const VotingInterface = ({ votante, onLogout, onBackToSelection }) => {
         // Verificar estado de la mesa antes de votar (solo para votantes regulares)
         if (votante.rol.tipo === 'votante') {
             try {
-                const response = await votanteAPI.verificarEstadoMesa(votante.credencial);
-                if (!response.data.mesaAbierta) {
+                const response = await mesaAPI.obtenerEstado(votante.circuito);
+                const estadoMesaData = response.data.estado;
+                if (!estadoMesaData.Esta_abierta) {
                     setError('No se puede votar: la mesa electoral está cerrada');
                     return;
                 }

@@ -12,7 +12,6 @@ export const votanteAPI = {
     login: (credencial) => api.post('/votantes/login', { credencial }),
     votar: (credencial, idPapeleta, idCircuito) =>
         api.post('/votantes/votar', { credencial, idPapeleta, idCircuito }),
-    verificarEstadoMesa: (credencial) => api.post('/votantes/verificar-estado-mesa', { credencial }),
 };
 
 // Servicios para elecciones

@@ -168,12 +168,12 @@ body {
     margin-right: 20px;
 }
 
-.papeleta-color.blanca {
+.papeleta-color.blanco {
     background: #f8f9fa;
     border: 2px solid #dee2e6;
 }
 
-.papeleta-color.roja {
+.papeleta-color.rojo {
     background: #dc3545;
 }
 
@@ -185,7 +185,7 @@ body {
     background: #28a745;
 }
 
-.papeleta-color.amarilla {
+.papeleta-color.amarillo {
     background: #ffc107;
 }
 
