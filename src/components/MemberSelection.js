@@ -1,6 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { votanteAPI } from '../services/api';
 
 const MemberSelection = ({ votante, onSelectRole, onLogout }) => {
+    const [estadoMesa, setEstadoMesa] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        verificarEstadoMesa();
+    }, []);
+
+    const verificarEstadoMesa = async () => {
+        try {
+            const response = await votanteAPI.verificarEstadoMesa(votante.credencial);
+            setEstadoMesa(response.data);
+            console.log('Estado de mesa verificado:', response.data);
+        } catch (error) {
+            console.error('Error al verificar estado de mesa:', error);
+            setError('No se pudo verificar el estado de la mesa');
+            // Si hay error, asumir que la mesa está abierta para no bloquear
+            setEstadoMesa({ mesaAbierta: true });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="selection-container">
+                <div className="selection-card">
+                    <h2>🗳️ Verificando estado de mesa...</h2>
+                    <div className="loading">Cargando...</div>
+                </div>
+            </div>
+        );
+    }
     return (
         <div className="selection-container">
             <div className="selection-card">
@@ -14,16 +48,30 @@ const MemberSelection = ({ votante, onSelectRole, onLogout }) => {
                     <h3>Seleccione una opción:</h3>
                     
                     <div className="role-options">
-                        <button 
-                            onClick={() => onSelectRole('voting')}
-                            className="btn btn-primary role-btn"
-                        >
-                            <div className="role-icon">🗳️</div>
-                            <div className="role-text">
-                                <h4>Votar</h4>
-                                <p>Ejercer mi derecho al voto como ciudadano</p>
+                        {/* Mostrar error si hubo problema verificando */}
+                        {error && <div className="error" style={{marginBottom: '15px'}}>{error}</div>}
+                        
+                        {/* Mostrar opción de votar solo si la mesa está abierta */}
+                        {estadoMesa && estadoMesa.mesaAbierta ? (
+                            <button 
+                                onClick={() => onSelectRole('voting')}
+                                className="btn btn-primary role-btn"
+                            >
+                                <div className="role-icon">🗳️</div>
+                                <div className="role-text">
+                                    <h4>Votar</h4>
+                                    <p>Ejercer mi derecho al voto como ciudadano</p>
+                                </div>
+                            </button>
+                        ) : (
+                            <div className="role-btn disabled-option">
+                                <div className="role-icon">🚫</div>
+                                <div className="role-text">
+                                    <h4>Votar - No Disponible</h4>
+                                    <p>{estadoMesa?.mensaje || 'La mesa no está disponible para votación'}</p>
+                                </div>
                             </div>
-                        </button>
+                        )}
 
                         <button 
                             onClick={() => onSelectRole('presidente')}
@@ -39,8 +87,8 @@ const MemberSelection = ({ votante, onSelectRole, onLogout }) => {
                 </div>
 
                 <div className="logout-section">
-                    <button onClick={onLogout} className="btn btn-link">
-                        Cerrar Sesión
+                    <button onClick={onLogout} className="btn btn-secondary">
+                        Regresar
                     </button>
                 </div>
             </div>

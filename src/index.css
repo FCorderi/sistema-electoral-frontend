@@ -456,6 +456,90 @@ body {
     text-decoration: none;
 }
 
+/* Mesa Cerrada Styles */
+.mesa-cerrada-container {
+    width: 100%;
+    max-width: 500px;
+}
+
+.mesa-cerrada-card {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.mesa-cerrada-card h2 {
+    margin-bottom: 20px;
+    color: #dc3545;
+    font-size: 24px;
+}
+
+.mesa-cerrada-message {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #856404;
+}
+
+.mesa-cerrada-message p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.mesa-cerrada-message p:last-child {
+    margin-bottom: 0;
+    font-weight: 600;
+}
+
+.mesa-cerrada-actions {
+    margin-top: 30px;
+}
+
+/* Disabled Option Styles */
+.disabled-option {
+    background: #f8f9fa !important;
+    border: 2px solid #e9ecef !important;
+    cursor: not-allowed !important;
+    opacity: 0.7;
+}
+
+.disabled-option:hover {
+    transform: none !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+.disabled-option .role-text h4 {
+    color: #6c757d;
+}
+
+.disabled-option .role-text p {
+    color: #dc3545;
+    font-weight: 500;
+}
+
+/* Warning Message Styles */
+.warning-message {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 20px 0;
+    color: #856404;
+}
+
+.warning-message p {
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.warning-message p:last-child {
+    margin-bottom: 0;
+}
+
 /* Utility Classes */
 .error {
     color: #721c24;
